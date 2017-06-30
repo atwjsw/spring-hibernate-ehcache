@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
+
 /**
  * Created by wenda on 6/29/2017.
  */
@@ -27,7 +28,8 @@ public class HibernateBookDao implements BookDao {
         return session;
     }
 
-    @Override
+//    @Override
+//    @Cacheable(value="books",key="#isbn")
     @Cacheable("books")
     public Book getByIsbn(String isbn) {
 

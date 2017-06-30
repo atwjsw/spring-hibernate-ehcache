@@ -20,10 +20,18 @@
             memoryStoreEvictionPolicy="LRU"
     />
 
+    <!--<cache name="books"-->
+           <!--maxBytesLocalHeap="50m"-->
+           <!--timeToLiveSeconds="100">-->
+    <!--</cache>-->
+
     <cache name="books"
-           maxBytesLocalHeap="50m"
-           timeToLiveSeconds="100">
-    </cache>
+           eternal="false"
+           maxElementsInMemory="10000"
+           overflowToDisk="false"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="0"
+           memoryStoreEvictionPolicy="LFU"/>
 
     <!--<cache name="org.hibernate.cache.spi.UpdateTimestampsCache"-->
            <!--maxElementsInMemory="5000"-->

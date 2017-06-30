@@ -2,40 +2,24 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xmlns:cache="http://www.springframework.org/schema/cache"
           xmlns:context="http://www.springframework.org/schema/context"
+          xmlns:aop="http://www.springframework.org/schema/aop"
           xsi:schemaLocation="http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context
 		http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/cache
-		http://www.springframework.org/schema/cache/spring-cache.xsd">
+		http://www.springframework.org/schema/cache/spring-cache.xsd
+		http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+         http://www.springframework.org/schema/cache
+        http://www.springframework.org/schema/cache/spring-cache.xsd">
 
     <context:component-scan base-package="com.atwjsw.hibernate" />
 
-    <!--<bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">-->
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
-        <property name="packagesToScan" value="com.atwjsw.hibernate"/>
-        <property name="hibernateProperties">
-            <props>
-                    <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-                    <prop key="hibernate.show_sql">true</prop>
-                    <prop key="hibernate.format_sql">false</prop>
-                    <prop key="hibernate.hbm2ddl.auto">update</prop>
-                    <!--<prop key="hibernate.current_session_context_class">thread</prop>-->
-                    <!-- 配置二级缓存, 本配置适用于 Hibernate4 -->
-                    <!-- 开启查询缓存 -->
-                    <prop key="hibernate.cache.use_query_cache">true</prop>
-                    <!-- 开启二级缓存 -->
-                    <prop key="hibernate.cache.use_second_level_cache">true</prop>
-                    <!-- 由于spring也使用了Ehcache, 保证双方都使用同一个缓存管理器 -->
-                    <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory</prop>
-            </props>
-        </property>
-    </bean>
+    <!-- 开启AOP切面注解  -->
+    <!--<aop:aspectj-autoproxy proxy-target-class="true"/>-->
 
-    <!--以上就是hibernate配置部分，之后就是该配置spring部分了，代码如下:-->
-    <!-- 开启注解 -->
-    <cache:annotation-driven cache-manager="cacheManager" proxy-target-class="true"/>
+    <!--<cache:annotation-driven cache-manager="cacheManager"/>-->
 
     <!-- ehcache缓存配置 -->
     <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
@@ -52,10 +36,36 @@
     <!--</bean>-->
 
     <bean id="cacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-        <property name="configLocation" value="classpath:ehcache.xml"/>
+        <!--<property name="configLocation" value="classpath:ehcache.xml"/>-->
+        <property name="configLocation">
+            <value>classpath:ehcache.xml</value>
+        </property>
         <!-- 由于hibernate也使用了Ehcache, 保证双方都使用同一个缓存管理器 -->
         <property name="shared" value="true"/>
     </bean>
+
+    <!--<bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">-->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="com.atwjsw.hibernate"/>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.format_sql">false</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <!--<prop key="hibernate.current_session_context_class">thread</prop>-->
+                <!-- 配置二级缓存, 本配置适用于 Hibernate4 -->
+                <!-- 开启查询缓存 -->
+                <prop key="hibernate.cache.use_query_cache">true</prop>
+                <!-- 开启二级缓存 -->
+                <prop key="hibernate.cache.use_second_level_cache">true</prop>
+                <!-- 由于spring也使用了Ehcache, 保证双方都使用同一个缓存管理器 -->
+                <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory</prop>
+            </props>
+        </property>
+    </bean>
+
 
     <!-- 配置连接池属性 -->
     <context:property-placeholder location="classpath:jdbc.properties" />
@@ -67,5 +77,8 @@
         <property name="user" value="${jdbc.username}"></property>
         <property name="password" value="${jdbc.password}"></property>
     </bean>
+
+
+
 
 </beans>

@@ -21,14 +21,19 @@ public class HibernateTest {
     @Autowired
     private BookDao bookDao;
 
+    @Autowired
+    private BookController bookController;
+
     @Test
     public void testApp()
     {
         logger.info(".... Fetching books");
 
-        logger.info("isbn-1234 -->" + bookDao.getByIsbn("isbn-1234"));
-        logger.info("isbn-1234 -->" + bookDao.getByIsbn("isbn-1234"));
-        logger.info("isbn-1234 -->" + bookDao.getByIsbn("isbn-1234"));
+        logger.info("isbn-1234 -->" + bookController.getBookList());
+
+//        logger.info("isbn-1234 -->" + bookDao.getByIsbn("isbn-1234"));
+//        logger.info("isbn-1234 -->" + bookDao.getByIsbn("isbn-1234"));
+//        logger.info("isbn-1234 -->" + bookDao.getByIsbn("isbn-1234"));
 
 
     }
